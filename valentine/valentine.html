@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For My Valentine ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body {
+  margin:0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  overflow:hidden;
+}
+
+.card {
+  background:white;
+  width:95%;
+  max-width:420px;
+  border-radius:20px;
+  padding:25px;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  position:relative;
+  max-height: 90vh;   /* allow card to grow almost full screen */
+  overflow-y: auto;   /* add vertical scrolling if content too big */
+}
+
+button {
+  background:#ff4d6d;
+  border:none;
+  color:white;
+  padding:12px 18px;
+  border-radius:25px;
+  font-size:16px;
+  margin:8px;
+  cursor:pointer;
+}
+
+button:hover { transform:scale(1.08); }
+
+#letter { display:none; text-align:left; white-space:pre-line; margin-top:15px; }
+
+img {
+  width:100%;
+  border-radius:12px;
+  margin-top:10px;
+}
+
+.heart {
+  position:absolute;
+  font-size:20px;
+  animation: float 6s linear infinite;
+}
+
+@keyframes float {
+  from {transform:translateY(100vh);}
+  to {transform:translateY(-10vh);}
+}
+
+#gameHeart {
+  position:fixed;
+  font-size:40px;
+  cursor:pointer;
+  display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Happy Valentine’s Day 💌</h2>
+
+<button onclick="startMusic()">Play Music 🎵</button>
+<audio id="music" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<button onclick="openLetter()">Open Letter ❤️</button>
+<div id="letter"></div>
+
+<div id="slideshow" style="display:none;">
+  <img id="slideImg" src="">
+  <button onclick="nextSlide()">Next Memory 📸</button>
+</div>
+
+<div id="quiz" style="display:none;">
+  <p>Who loves you the most?</p>
+  <button onclick="right()">You 😌</button>
+  <button onclick="wrong()">Someone else 😒</button>
+</div>
+
+<button onclick="startGame()">Catch My Heart 💖</button>
+
+</div>
+
+<div id="gameHeart">❤️</div>
+
+<script>
+/* ========== LOVE LETTER ========== */
+
+const text = `My Dearest [Raincloud],
+
+Distance keeps us apart physically,
+but never from my heart.
+
+Every message from you makes my day brighter.
+Every laugh we share is a memory I keep.
+
+Click through everything on this page 
+because every part was made just for you.
+
+Happy Valentine’s Day ❤️
+
+— [Mr. Honeybun]`;
+
+let typing = false;  // flag to check if typewriter is running
+
+function openLetter(){
+  if(typing) return;  // ignore clicks if already typing
+  typing = true;
+
+  const box = document.getElementById("letter");
+  box.style.display = "block";
+  box.innerHTML = "";  // reset text
+
+  typeWriter();
+}
+
+function typeWriter(i = 0){
+  const box = document.getElementById("letter");
+  if(i < text.length){
+    box.innerHTML += text.charAt(i);
+    setTimeout(() => typeWriter(i + 1), 30);
+  } else {
+    document.getElementById("slideshow").style.display = "block";
+    document.getElementById("quiz").style.display = "block";
+    typing = false;  // allow typing again if needed
+  }
+}
+
+/* ========== MUSIC ========== */
+
+function startMusic(){
+  document.getElementById("music").play();
+}
+
+/* ========== SLIDESHOW ========== */
+
+const slides=[
+ "photo1.jpeg",
+ "photo2.jpeg",
+ "photo3.jpeg",
+ "photo4.jpeg"
+];
+
+let idx=0;
+function nextSlide(){
+  document.getElementById("slideImg").src=slides[idx];
+  idx=(idx+1)%slides.length;
+}
+
+/* ========== QUIZ ========== */
+
+function right(){
+  alert("Correct answer. Reward: Unlimited hugs 🤗");
+}
+
+function wrong(){
+  alert("Wrong answer. Try again 😌");
+}
+
+/* ========== HEART GAME ========== */
+
+function startGame(){
+  const h=document.getElementById("gameHeart");
+  h.style.display="block";
+  moveHeart();
+}
+
+function moveHeart(){
+  const h=document.getElementById("gameHeart");
+  h.style.left=Math.random()*80+"vw";
+  h.style.top=Math.random()*80+"vh";
+}
+
+document.getElementById("gameHeart").onclick=function(){
+  alert("You caught my heart — keep it forever 💞");
+  this.style.display="none";
+};
+
+/* ========== FLOATING HEARTS ========== */
+
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="❤️";
+  h.style.left=Math.random()*100+"vw";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),6000);
+},600);
+
+</script>
+
+</body>
+</html>
